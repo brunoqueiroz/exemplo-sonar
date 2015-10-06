@@ -28,14 +28,6 @@ gulp.task('test:auto', ['watch'], function(done) {
 });
 
 gulp.task('sonar', function() {
-    if (!process.env.SONAR_JDBC_USERNAME ||
-        !process.env.SONAR_JDBC_PASSWORD ||
-        !process.env.SONAR_PASSWORD ||
-        !process.env.SONAR_USERNAME ||
-        !process.env.SONAR_JDBC_URL ||
-        !process.env.BUILD_TAG) {
-        return
-    }
     var options = {
         sonar: {
             login: 'admin',
@@ -45,8 +37,6 @@ gulp.task('sonar', function() {
             },
             jdbc: {
                 url: 'jdbc:h2:tcp://192.168.99.100/sonar'//,
-                // username: process.env.SONAR_JDBC_USERNAME,
-                // password: process.env.SONAR_JDBC_PASSWORD
             },
             projectKey: 'io.redspark:exemplo-sonar',
             projectName: 'exemplo-sonar',
