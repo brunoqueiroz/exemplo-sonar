@@ -33,8 +33,6 @@ module.exports = function(config) {
 
         frameworks: ['jasmine', 'angular-filesort'],
 
-        reporters: ['progress', 'coverage'], //add
-
         angularFilesort: {
             whitelist: [path.join(conf.paths.src, '/**/!(*.html|*.spec|*.mock).js')]
         },
@@ -44,38 +42,18 @@ module.exports = function(config) {
             moduleName: 'exemploSonar'
         },
 
-        browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
 
         plugins: [
             'karma-phantomjs-launcher',
             'karma-angular-filesort',
             'karma-jasmine',
-            'karma-ng-html2js-preprocessor',
-            'karma-chrome-launcher', //add
-            'karma-coverage' //add
-
+            'karma-ng-html2js-preprocessor'
         ],
 
         preprocessors: { 
-            'src/**/*.html': ['ng-html2js'], 
-            'src/**/*.js': ['coverage'] //add
-        },
-        
-        coverageReporter: { //add
-            dir: 'coverage',
-            reporters: [
-                {
-                    type: 'html',
-                    subdir: 'report-html'
-                },
-                {
-                    type: 'lcovonly',
-                    subdir: '.',
-                    file: 'report-lcov.lcov'
-                }
-            ]
+            'src/**/*.html': ['ng-html2js']
         }
-
     };
 
     // This block is needed to execute Chrome on Travis
