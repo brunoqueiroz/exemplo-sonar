@@ -1,0 +1,83 @@
+'use strict';
+
+var path = require('path');
+var gulp = require('gulp');
+var conf = require('./conf');
+
+var karma = require('karma');
+
+function runTests(singleRun, done, coverage) {
+    listFiles(function(files) {
+        //console.log(files);
+        karma.server.start({
+            configFile: __dirname + '/../karma.conf.js',
+            files: files,
+            singleRun: singleRun,
+            autoWatch: !singleRun,
+            //preprocessors: coverage ? preprocessors : preprocessorsWithoutCoverage
+        }, done);
+    });
+}
+
+var preprocessors = {
+    'src/**/*.html': ['ng-html2js'],
+    //'src/**/!(*spec.js|*.html|*tpl.js)': ['coverage']
+    'src/**/*.js': ['coverage']
+}
+
+var preprocessorsWithoutCoverage = {
+    'src/**/*.html': ['ng-html2js']
+}
+
+gulp.task('test', ['scripts'], function(done) {
+    runTests(true, done);
+});
+
+gulp.task('test:auto', ['watch'], function(done) {
+    runTests(false, done);
+});
+
+gulp.task('sonar', function() {
+    if (!process.env.SONAR_JDBC_USERNAME ||
+        !process.env.SONAR_JDBC_PASSWORD ||
+        !process.env.SONAR_PASSWORD ||
+        !process.env.SONAR_USERNAME ||
+        !process.env.SONAR_JDBC_URL ||
+        !process.env.BUILD_TAG) {
+        return
+    }
+    var options = {
+        sonar: {
+            login: process.env.SONAR_USERNAME,
+            password: process.env.SONAR_PASSWORD,
+            host: {
+                url: 'http://sonar.redspark.io'
+            },
+            jdbc: {
+                url: process.env.SONAR_JDBC_URL,
+                username: process.env.SONAR_JDBC_USERNAME,
+                password: process.env.SONAR_JDBC_PASSWORD
+            },
+            projectKey: 'io.redspark:sesc-gso-web',
+            projectName: 'sesc-gso-web',
+            projectVersion: process.env.BUILD_TAG,
+            // comma-delimited string of source directories 
+            sources: 'src/components,src/app',
+            exclusions: 'src/**/*.mock.js,src/**/*.spec.js,src/components/datatables/**/*.js,src/components/gestor-acesso/**/*.js',
+            language: 'js',
+            sourceEncoding: 'UTF-8',
+            javascript: {
+                lcov: {
+                    reportPath: 'coverage/report-lcov.lcov'
+                }
+            }
+        }
+    };
+
+    // gulp source doesn't matter, all files are referenced in options object above 
+    return gulp.src('thisFileDoesNotExist.js', {
+            read: false
+        })
+        .pipe(sonar(options))
+        .on('error', util.log);
+});
