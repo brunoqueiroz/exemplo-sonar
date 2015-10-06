@@ -13,11 +13,21 @@ function runTests(singleRun, done) {
     karma.server.start({
         configFile: path.join(__dirname, '/../karma.conf.js'),
         singleRun: singleRun,
-        autoWatch: !singleRun
+        autoWatch: !singleRun,
+        preprocessors: singleRun ? preprocessorsComCobertura : preprocessorsSemCobertura
     }, function() {
         done();
     });
 }
+
+var preprocessorsComCobertura = {
+    'src/**/*.html': ['ng-html2js'],
+    'src/**/*.js': ['coverage'] 
+};
+
+var preprocessorsSemCobertura = {
+    'src/**/*.html': ['ng-html2js']
+};
 
 gulp.task('test', ['scripts'], function(done) {
     runTests(true, done);
@@ -36,7 +46,7 @@ gulp.task('sonar', function() {
                 url: 'http://192.168.99.100:9000'
             },
             jdbc: {
-                url: 'jdbc:h2:tcp://192.168.99.100/sonar'//,
+                url: 'jdbc:h2:tcp://192.168.99.100/sonar' //,
             },
             projectKey: 'io.redspark:exemplo-sonar',
             projectName: 'exemplo-sonar',

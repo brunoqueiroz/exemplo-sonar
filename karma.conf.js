@@ -44,7 +44,7 @@ module.exports = function(config) {
             moduleName: 'exemploSonar'
         },
 
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome'],
 
         plugins: [
             'karma-phantomjs-launcher',
