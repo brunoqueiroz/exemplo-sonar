@@ -1,0 +1,66 @@
+scripts
+
+
+
+Para quem não conhece o soar ele é meio que uma central de qualidade do seu código, com ele voce consegue fazer uma analise bem precisa do seu fonte, tirar diversar métricas e ele consegue também te alertar para alguma inconsistencia no seu código. Tudo isso voce consegue visualizar atraves de gráficos na interface do sonar.
+
+
+
+-- subir container com sonar
+- "SonarQube é um software open-source que se propõe a ser a central de qualidade do seu código-fonte, lhe possibilitando o controle sobre um grande número de métricas de software, e ainda apontando uma série de possíveis bugs. Tudo isso é gerado através de uma análise completa do código, e após isso os resultados obtidos são mostrados através de uma interface web, em forma de dashboards, e gráficos. 
+- https://github.com/SonarSource/docker-sonarqube
+- docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 sonarqube:5.1
+- docker logs -f sonarqube
+- 192.168.99.100:9000
+- instalar o plugins do javascript 
+- docker restart sonarqube
+
+-- ajustar o arquivo karma.conf.js
+- https://github.com/karma-runner/karma-coverage
+- reporters
+- plugins
+- preprocessors
+- coverageReporter
+- instalar as libs
+- npm install karma-chrome-launcher --save-dev
+- npm install karma-coverage --save-dev
+
+-- testar utilizando o gulp test
+- ver se o relatório de cobertura está ok
+- mostrar o arquivo lcov
+
+-- ajustar o arquivo unit-tests.js
+- adicionar a task gulp-sonar
+- instalar a lib gulp-sonar
+- https://github.com/carsdotcom/gulp-sonar
+- npm install gulp-sonar --save-dev
+- rodar o gulp sonar
+- mostrar o resultado http://192.168.99.100:9000
+
+https://github.com/Swiip/generator-gulp-angular
+
+--- extras
+
+-- na task sonar no unit-test mostrar o username e password no jdbc
+- username: process.env.SONAR_JDBC_USERNAME,
+- password: process.env.SONAR_JDBC_PASSWORD
+
+-- usando login/senha para melhorar a segurança
+- login: 'admin',
+- password: 'admin'
+
+-- mostrar como usar as variaveis de ambiente
+-- process.env.SONAR_JDBC_USERNAME
+
+-- melhorando o workflow de testes 
+
+var preprocessorsComCobertura = {
+    'src/**/*.html': ['ng-html2js'],
+    'src/**/*.js': ['coverage'] 
+};
+
+var preprocessorsSemCobertura = {
+    'src/**/*.html': ['ng-html2js']
+};
+
+preprocessors: singleRun ? preprocessorsComCobertura : preprocessorsSemCobertura

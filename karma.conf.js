@@ -33,6 +33,8 @@ module.exports = function(config) {
 
         frameworks: ['jasmine', 'angular-filesort'],
 
+        reporters: ['progress', 'coverage'],
+
         angularFilesort: {
             whitelist: [path.join(conf.paths.src, '/**/!(*.html|*.spec|*.mock).js')]
         },
@@ -48,11 +50,25 @@ module.exports = function(config) {
             'karma-phantomjs-launcher',
             'karma-angular-filesort',
             'karma-jasmine',
-            'karma-ng-html2js-preprocessor'
+            'karma-ng-html2js-preprocessor',
+            'karma-coverage'
         ],
 
-        preprocessors: { 
-            'src/**/*.html': ['ng-html2js']
+        preprocessors: {
+            'src/**/*.html': ['ng-html2js'],
+            'src/**/*.js': ['coverage']
+        },
+
+        coverageReporter: { //add
+            dir: 'coverage',
+            reporters: [{
+                type: 'html',
+                subdir: 'report-html'
+            }, {
+                type: 'lcovonly',
+                subdir: '.',
+                file: 'report-lcov.lcov'
+            }]
         }
     };
 
